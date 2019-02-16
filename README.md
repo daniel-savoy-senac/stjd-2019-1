@@ -1,2 +1,2 @@
-# stjd2019-1
+# Jogos Digitais 2019
 Aulas de Computação Gráfica 2019 - 1o Semestre
