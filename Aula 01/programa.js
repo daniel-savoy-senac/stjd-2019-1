@@ -1,5 +1,5 @@
-function pintar(hue=60){
-    document.body.style.background = `hsl(${hue}deg,100%,50%)`;
+function pintar(hue=60, lum=50){
+    document.body.style.background = `hsl(${hue}deg,100%,${lum}%)`;
 }
 
 function calcularCor(event){
@@ -11,9 +11,10 @@ function calcularCor(event){
 
     console.log("POS",event.x," :: ", event.y);
     
-    let cor = event.x; //Math.random()*360;
+    let hue = x/w * 360;
+    let lum = (1 - y/h) * 100;
     
-    pintar(cor);
+    pintar(hue, lum);
 }
 
 window.addEventListener("mousemove", calcularCor);
