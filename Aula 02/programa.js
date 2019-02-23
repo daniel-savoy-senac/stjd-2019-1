@@ -26,6 +26,9 @@ async function main() {
     vertexShaderSource = await fetch("vertex.glsl").then(r => r.text());
     console.log("VERTEX", vertexShaderSource);
 
+    fragmentShaderSource = await fetch("fragment.glsl").then(r => r.text());
+    console.log("FRAGMENT", fragmentShaderSource);
+
 // 4 - Compilar arquivos de shader
 // 5 - Linkar o programa de shader
 // 6 - Criar dados de parâmetro
