@@ -7,7 +7,9 @@ let canvas,
     vertexShader,
     fragmentShader,
     shaderProgram,
-    data;
+    data,
+    positionAttr,
+    positionBuffer;
 
 function getCanvas(){
     return document.querySelector("canvas");
@@ -39,7 +41,7 @@ function linkProgram(vertexShader, fragmentShader, gl){
 }
 
 function getData() {
-    let points = [0];
+    let points = [0,0];
     return { "points" : new Float32Array(points) };
 }
 
@@ -68,6 +70,12 @@ async function main() {
     data = getData();
 
 // 7 - Transferir os dados para GPU
+    positionAttr = gl.getAttribLocation(program, "position");
+    positionBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, data.points, gl.STATIC_DRAW);
+    gl.enableVertexAttribArray(positionAttr);
+    gl.vertexAttribPointer(positionAttr, 2, gl.FLOAT, false, 0, 0);
 
 // 8 - Chamar o loop de redesenho
 
