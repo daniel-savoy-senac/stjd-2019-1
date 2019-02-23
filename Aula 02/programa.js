@@ -41,7 +41,7 @@ function linkProgram(vertexShader, fragmentShader, gl){
 }
 
 function getData() {
-    let points = [0,0];
+    let points = [0,0, 0.5];
     return { "points" : new Float32Array(points) };
 }
 
@@ -65,12 +65,13 @@ async function main() {
 
 // 5 - Linkar o programa de shader
     shaderProgram = linkProgram(vertexShader, fragmentShader, gl);
+    gl.useProgram(shaderProgram);
 
 // 6 - Criar dados de parâmetro
     data = getData();
 
 // 7 - Transferir os dados para GPU
-    positionAttr = gl.getAttribLocation(program, "position");
+    positionAttr = gl.getAttribLocation(shaderProgram, "position");
     positionBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, data.points, gl.STATIC_DRAW);
@@ -78,7 +79,8 @@ async function main() {
     gl.vertexAttribPointer(positionAttr, 2, gl.FLOAT, false, 0, 0);
 
 // 8 - Chamar o loop de redesenho
-
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    gl.drawArrays(gl.POINTS, 0, data.points.length / 2);
 
 }
 
