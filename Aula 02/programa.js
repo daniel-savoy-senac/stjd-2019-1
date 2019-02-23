@@ -6,7 +6,8 @@ let canvas,
     fragmentShaderSource,
     vertexShader,
     fragmentShader,
-    shaderProgram;
+    shaderProgram,
+    data;
 
 function getCanvas(){
     return document.querySelector("canvas");
@@ -37,6 +38,11 @@ function linkProgram(vertexShader, fragmentShader, gl){
     return program;
 }
 
+function getData() {
+    let points = [0];
+    return { "points" : new Float32Array(points) };
+}
+
 async function main() {
 // 1 - Carregar tela de desenho
     canvas = getCanvas();
@@ -57,10 +63,14 @@ async function main() {
 
 // 5 - Linkar o programa de shader
     shaderProgram = linkProgram(vertexShader, fragmentShader, gl);
-    
+
 // 6 - Criar dados de parâmetro
+    data = getData();
+
 // 7 - Transferir os dados para GPU
+
 // 8 - Chamar o loop de redesenho
+
 
 }
 
