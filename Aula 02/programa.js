@@ -5,7 +5,8 @@ let canvas,
     vertexShaderSource,
     fragmentShaderSource,
     vertexShader,
-    fragmentShader;
+    fragmentShader,
+    shaderProgram;
 
 function getCanvas(){
     return document.querySelector("canvas");
@@ -24,6 +25,16 @@ function compileShader(source, type, gl){
     if(!gl.getShaderParameter(shader, gl.COMPILE_STATUS))
         console.error("ERRO NA COMPILAÇÃO", gl.getShaderInfoLog(shader));
     return shader;
+}
+
+function linkProgram(vertexShader, fragmentShader, gl){
+    let program = gl.createProgram();
+    gl.attachShader(program, vertexShader);
+    gl.attachShader(program, fragmentShader);
+    gl.linkProgram(program);
+    if(!gl.getProgramParameter(program, gl.LINK_STATUS))
+        console.error("ERRO NA LINKAGEM");
+    return program;
 }
 
 async function main() {
@@ -45,6 +56,8 @@ async function main() {
     fragmentShader = compileShader(fragmentShaderSource, gl.FRAGMENT_SHADER, gl);
 
 // 5 - Linkar o programa de shader
+    shaderProgram = linkProgram(vertexShader, fragmentShader, gl);
+    
 // 6 - Criar dados de parâmetro
 // 7 - Transferir os dados para GPU
 // 8 - Chamar o loop de redesenho
