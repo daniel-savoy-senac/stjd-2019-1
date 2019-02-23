@@ -42,7 +42,8 @@ async function main() {
 
 // 4 - Compilar arquivos de shader
     vertexShader = compileShader(vertexShaderSource, gl.VERTEX_SHADER, gl);
-    
+    fragmentShader = compileShader(fragmentShaderSource, gl.FRAGMENT_SHADER, gl);
+
 // 5 - Linkar o programa de shader
 // 6 - Criar dados de parâmetro
 // 7 - Transferir os dados para GPU
