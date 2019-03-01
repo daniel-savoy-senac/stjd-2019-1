@@ -41,7 +41,10 @@ function linkProgram(vertexShader, fragmentShader, gl){
 }
 
 function getData() {
-    let points = [0,0, 0.5];
+    let points = [
+            0.0, 0.0,
+            1.0, 1.0
+        ];
     return { "points" : new Float32Array(points) };
 }
 
@@ -80,7 +83,8 @@ async function main() {
 
 // 8 - Chamar o loop de redesenho
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    gl.drawArrays(gl.POINTS, 0, data.points.length / 2);
+    //gl.POINTS, gl.LINES
+    gl.drawArrays(gl.LINES, 0, data.points.length / 2);
 
 }
 
