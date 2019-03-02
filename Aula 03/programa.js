@@ -42,9 +42,13 @@ function linkProgram(vertexShader, fragmentShader, gl){
 
 function getData() {
     let points = [
-            -1.0, 0.0,
-            0.0, 1.0,
-            1.0, 0.0
+            0.5, 0.5,
+            0.5, -0.5,
+            -0.5, -0.5,
+            
+            -0.5, -0.5,
+            -0.5, 0.5,
+            0.5, 0.5
         ];
     return { "points" : new Float32Array(points) };
 }
@@ -88,7 +92,6 @@ async function main() {
     // gl.LINES, gl.LINE_STRIP, gl.LINE_LOOP
     // gl.TRIANGLES, gl.TRIANGLE_STRIP, gl.TRIANGLE_FAN 
     gl.drawArrays(gl.TRIANGLES, 0, data.points.length / 2);
-
 }
 
 window.addEventListener("load", main);
