@@ -11,7 +11,9 @@ let canvas,
     positionAttr,
     positionBuffer,
     width,
-    height;
+    height,
+    aspectUniform,
+    aspect;
 
 function resize(){
     if(!gl) return;
@@ -20,7 +22,9 @@ function resize(){
     canvas.setAttribute("width", width);
     canvas.setAttribute("height", height);
     gl.viewport(0, 0, width, height);
-    // [TODO] Passar aspecto para shaders 
+    aspect = width / height;
+    aspectUniform = gl.getUniformLocation(shaderProgram, "aspect");
+    gl.uniform1f(aspectUniform, aspect);
 }
 
 
@@ -71,7 +75,6 @@ async function main() {
 
 // 2 - Carregar o contexto (API) WebGL
     gl = getGLContext(canvas);
-    resize();
 
 // 3 - Ler os arquivos de shader
     vertexShaderSource = await fetch("vertex.glsl").then(r => r.text());
@@ -99,14 +102,22 @@ async function main() {
     gl.enableVertexAttribArray(positionAttr);
     gl.vertexAttribPointer(positionAttr, 2, gl.FLOAT, false, 0, 0);
 
+// 7.1 - ASPECT UNIFORM
+    resize();
+    window.addEventListener("resize", resize);
+
 // 8 - Chamar o loop de redesenho
+    render();
+    
+}
+
+function render(){
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     // gl.POINTS
     // gl.LINES, gl.LINE_STRIP, gl.LINE_LOOP
     // gl.TRIANGLES, gl.TRIANGLE_STRIP, gl.TRIANGLE_FAN 
     gl.drawArrays(gl.TRIANGLES, 0, data.points.length / 2);
+    window.requestAnimationFrame(render);
 }
 
 window.addEventListener("load", main);
-
-window.addEventListener("resize", resize);
