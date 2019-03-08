@@ -4,7 +4,7 @@ attribute vec2 position;
 
 varying vec2 vertexPos;
 
-float aspect = 800.0 / 600.0;
+uniform float aspect;
 
 void main() {
     vertexPos = position;
