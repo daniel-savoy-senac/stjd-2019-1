@@ -14,6 +14,7 @@ let canvas,
     height;
 
 function resize(){
+    if(!gl) return;
     width = window.innerWidth;
     height = window.innerHeight;
     canvas.setAttribute("width", width);
@@ -29,7 +30,6 @@ function getCanvas(){
 
 function getGLContext(canvas) {
     let gl = canvas.getContext("webgl");
-    resize();
     return gl;
 }
 
@@ -71,6 +71,7 @@ async function main() {
 
 // 2 - Carregar o contexto (API) WebGL
     gl = getGLContext(canvas);
+    resize();
 
 // 3 - Ler os arquivos de shader
     vertexShaderSource = await fetch("vertex.glsl").then(r => r.text());
