@@ -120,4 +120,5 @@ function render(){
     window.requestAnimationFrame(render);
 }
 
+// keypress, keydown, keyup
 window.addEventListener("load", main);
