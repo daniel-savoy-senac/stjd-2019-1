@@ -6,7 +6,9 @@ varying vec2 vertexPos;
 
 uniform float aspect;
 
+uniform vec2 location;
+
 void main() {
-    vertexPos = position;
-    gl_Position = vec4(position.x / aspect, position.y, 0.0, 1.0);
+    vertexPos = location + position;
+    gl_Position = vec4(vertexPos.x / aspect, vertexPos.y, 0.0, 1.0);
 }
