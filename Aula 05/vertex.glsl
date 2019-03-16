@@ -1,14 +1,21 @@
 precision highp float;
 
-attribute vec2 position;
+// Posição do Vértice
+attribute vec3 position;
 
-varying vec2 vertexPos;
+// Posição do Vértice em relação à Camera
+varying vec4 vertexPos;
 
-uniform float aspect;
+// fovy, aspect, near, far 
+uniform mat4 projection;
 
-uniform vec2 location;
+// eye, up, certer/lookAt
+uniform mat4 view;
+
+// posição, rotação, escala do modelo (world)
+uniform mat4 model;
 
 void main() {
-    vertexPos = location + position;
-    gl_Position = vec4(vertexPos.x / aspect, vertexPos.y, 0.0, 1.0);
+    vertexPos = view * model * vec4(position, 1.0);
+    gl_Position = projection * vertexPos;
 }
