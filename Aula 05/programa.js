@@ -12,13 +12,17 @@ let canvas,
     positionBuffer,
     width,
     height,
-    aspectUniform,
-    aspect,
-    loc = [0, 0],
-    locationUniform,
+    projectionUniform,
+    projection,
+    loc = [0, 0, 0],
+    modelUniform,
+    model,
+    viewUniform,
+    view,
+    cameraLoc = [0, 0, 0],
     colorUniform,
-    color1 = [1,0,0],
-    color2 = [0,0,1];
+    color1 = [1, 0, 0],
+    color2 = [0, 0, 1];
 
 function resize() {
     if (!gl) return;
@@ -63,18 +67,18 @@ function linkProgram(vertexShader, fragmentShader, gl) {
 
 function getData() {
     let points = [
-        0.5, 0.5,
-        0.5, -0.5,
-        -0.5, -0.5,
+        0.5, 0.5, 1.0,
+        0.5, -0.5, 0.0,
+        -0.5, -0.5, 1.0,
 
-        -0.5, -0.5,
-        -0.5, 0.5,
-        0.5, 0.5,
+        -0.5, -0.5, 0.5,
+        -0.5, 0.5, 2.0,
+        0.5, 0.5, -1.0,
 
         // CENARIO
-        0.5, 0.5,
-        0.5, -0.5,
-        -0.5, -0.5,
+        0.5, 0.5, 0.75,
+        0.5, -0.5, 0.0,
+        -0.5, -0.5, 1.0
     ];
     return { "points": new Float32Array(points) };
 }
@@ -110,7 +114,7 @@ async function main() {
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, data.points, gl.STATIC_DRAW);
     gl.enableVertexAttribArray(positionAttr);
-    gl.vertexAttribPointer(positionAttr, 2, gl.FLOAT, false, 0, 0);
+    gl.vertexAttribPointer(positionAttr, 3, gl.FLOAT, false, 0, 0);
 
     // 7.1 - ASPECT UNIFORM
     resize();
