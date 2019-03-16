@@ -1,5 +1,7 @@
 /* Variávei globais */
 
+let {mat4, vec4, vec3, vec2} = glMatrix;
+
 let canvas,
     gl,
     vertexShaderSource,
@@ -116,14 +118,15 @@ async function main() {
     gl.enableVertexAttribArray(positionAttr);
     gl.vertexAttribPointer(positionAttr, 3, gl.FLOAT, false, 0, 0);
 
-    // 7.1 - ASPECT UNIFORM
+    // 7.1 - [TODO: PROJECTION e VIEW] ASPECT UNIFORM
     resize();
     window.addEventListener("resize", resize);
 
-    // 7.2 - DESLOCAMENTO UNIFORM
-    locationUniform = gl.getUniformLocation(shaderProgram, "location");
-    //gl.uniform2f(locationUniform, loc[0], loc[1]);
-    //gl.uniform2fv(locationUniform, new Float32Array(loc));
+    // 7.2 - MODEL MATRIX UNIFORM
+    model = mat4.create();
+    modelUniform = gl.getUniformLocation(shaderProgram, "model");
+    gl.uniformMatrix4fv(modelUniform, false, model);
+    
 
 
     // 7.3 - COLOR UNIFORM
