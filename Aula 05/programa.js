@@ -21,7 +21,7 @@ let canvas,
     model,
     viewUniform,
     view,
-    cameraLoc = [0, 0, 0],
+    eye = [0, 0, 0],
     colorUniform,
     color1 = [1, 0, 0],
     color2 = [0, 0, 1];
@@ -33,9 +33,13 @@ function resize() {
     canvas.setAttribute("width", width);
     canvas.setAttribute("height", height);
     gl.viewport(0, 0, width, height);
-    aspect = width / height;
-    aspectUniform = gl.getUniformLocation(shaderProgram, "aspect");
-    gl.uniform1f(aspectUniform, aspect);
+    let aspect = width / height;
+    let near = 0.001;
+    let far = 1000;
+    let fovy = 1.3;
+    projectionUniform = gl.getUniformLocation(shaderProgram, "projection");
+    projection = mat4.perspective([], fovy, aspect, near, far);
+    gl.uniformMatrix4fv(projectionUniform, false, projection);
 }
 
 
@@ -118,18 +122,26 @@ async function main() {
     gl.enableVertexAttribArray(positionAttr);
     gl.vertexAttribPointer(positionAttr, 3, gl.FLOAT, false, 0, 0);
 
-    // 7.1 - [TODO: PROJECTION e VIEW] ASPECT UNIFORM
+    // 7.1 - PROJECTION MATRIX UNIFORM
     resize();
     window.addEventListener("resize", resize);
 
-    // 7.2 - MODEL MATRIX UNIFORM
+    // 7.2 - VIEW MATRIX UNIFORM
+    eye  = [0, 0, -5];
+    let up = [0, 1, 0];
+    let center = [0, 0, 0];
+    view = mat4.lookAt([], eye, center, up);
+    viewUniform = gl.getUniformLocation(shaderProgram, "view");
+    gl.uniformMatrix4fv(viewUniform, false, view);
+
+    // 7.3 - MODEL MATRIX UNIFORM
     model = mat4.create();
     modelUniform = gl.getUniformLocation(shaderProgram, "model");
     gl.uniformMatrix4fv(modelUniform, false, model);
     
 
 
-    // 7.3 - COLOR UNIFORM
+    // 7.4 - COLOR UNIFORM
     colorUniform = gl.getUniformLocation(shaderProgram, "color");
     //gl.uniform2f(locationUniform, loc[0], loc[1]);
 
@@ -147,12 +159,10 @@ function render() {
     
     // RENDERIZA O PERSONAGEM
     gl.uniform3f(colorUniform, color1[0], color1[1], color1[2]);
-    gl.uniform2f(locationUniform, loc[0], loc[1]);
     gl.drawArrays(gl.TRIANGLES, 0, 6);
     
     // RENDERIZA O CENARIO
     gl.uniform3f(colorUniform, color2[0], color2[1], color2[2]);
-    gl.uniform2f(locationUniform, 0, 0);
     gl.drawArrays(gl.TRIANGLES, 6, 3);
     
     window.requestAnimationFrame(render);
