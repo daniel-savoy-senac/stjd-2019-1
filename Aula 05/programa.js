@@ -49,6 +49,7 @@ function getCanvas() {
 
 function getGLContext(canvas) {
     let gl = canvas.getContext("webgl");
+    gl.enable(gl.DEPTH_TEST);
     return gl;
 }
 
