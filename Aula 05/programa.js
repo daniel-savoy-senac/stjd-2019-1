@@ -2,7 +2,8 @@
 
 let {mat4, vec4, vec3, vec2} = glMatrix;
 
-let canvas,
+let frame = 0,
+    canvas,
     gl,
     vertexShaderSource,
     fragmentShaderSource,
@@ -155,7 +156,7 @@ async function main() {
     window.addEventListener("resize", resize);
 
     // 7.2 - VIEW MATRIX UNIFORM
-    eye  = [4, 3, -5];
+    eye  = [-5, 3, 0];
     let up = [0, 1, 0];
     let center = [0, 0, 0];
     view = mat4.lookAt([], eye, center, up);
@@ -179,6 +180,17 @@ async function main() {
 }
 
 function render() {
+    frame ++;
+
+    let time = frame / 100;
+
+    eye  = [Math.sin(time) * 5, 3, Math.cos(time) * 5];
+    let up = [0, 1, 0];
+    let center = [0, 0, 0];
+    view = mat4.lookAt([], eye, center, up);
+    gl.uniformMatrix4fv(viewUniform, false, view);
+
+
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     // gl.POINTS
     // gl.LINES, gl.LINE_STRIP, gl.LINE_LOOP
