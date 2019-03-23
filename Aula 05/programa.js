@@ -155,7 +155,7 @@ async function main() {
     window.addEventListener("resize", resize);
 
     // 7.2 - VIEW MATRIX UNIFORM
-    eye  = [4, -3, 5];
+    eye  = [4, 3, -5];
     let up = [0, 1, 0];
     let center = [0, 0, 0];
     view = mat4.lookAt([], eye, center, up);
