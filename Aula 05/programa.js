@@ -24,7 +24,11 @@ let canvas,
     eye = [0, 0, 0],
     colorUniform,
     color1 = [1, 0, 0],
-    color2 = [0, 0, 1];
+    color2 = [0, 0, 1],
+    color3 = [0, .7, 0],
+    color4 = [1, 0, 1],
+    color5 = [1, .6, 0],
+    color6 = [0, 1, 1];
 
 function resize() {
     if (!gl) return;
@@ -73,21 +77,44 @@ function linkProgram(vertexShader, fragmentShader, gl) {
 }
 
 function getData() {
-    let points = [
-        0.5, 0.5, 1.0,
-        0.5, -0.5, 0.0,
-        -0.5, -0.5, 1.0,
+    let p = {
+        a: [-1, 1, -1],
+        b: [-1, -1, -1],
+        c: [1, 1, -1],
+        d: [1, -1, -1],
+        e: [-1, 1, 1],
+        f: [1, 1, 1],
+        g: [-1, -1, 1],
+        h: [1, -1, 1]
+    };
 
-        -0.5, -0.5, 0.5,
-        -0.5, 0.5, 2.0,
-        0.5, 0.5, -1.0,
+    let faces = [
+        // FRENTE
+        ...p.a, ...p.b, ...p.c,
+        ...p.d, ...p.c, ...p.b,
 
-        // CENARIO
-        0.5, 0.5, 0.75,
-        0.5, -0.5, 0.0,
-        -0.5, -0.5, 1.0
+        // TOPO
+        ...p.e, ...p.a, ...p.f,
+        ...p.c, ...p.f, ...p.a,
+
+        // BAIXO
+        ...p.b, ...p.g, ...p.d,
+        ...p.h, ...p.d, ...p.g,
+
+        // ESQUERDA
+        ...p.e, ...p.g, ...p.a,
+        ...p.b, ...p.a, ...p.g,
+
+        // DIREITA
+        ...p.c, ...p.d, ...p.f,
+        ...p.h, ...p.f, ...p.d,
+
+        //FUNDO
+        ...p.f, ...p.h, ...p.e,
+        ...p.g, ...p.e, ...p.h
     ];
-    return { "points": new Float32Array(points) };
+
+    return { "points": new Float32Array(faces)};
 }
 
 async function main() {
@@ -128,7 +155,7 @@ async function main() {
     window.addEventListener("resize", resize);
 
     // 7.2 - VIEW MATRIX UNIFORM
-    eye  = [0, 0, -5];
+    eye  = [4, -3, 5];
     let up = [0, 1, 0];
     let center = [0, 0, 0];
     view = mat4.lookAt([], eye, center, up);
@@ -158,14 +185,30 @@ function render() {
     // gl.TRIANGLES, gl.TRIANGLE_STRIP, gl.TRIANGLE_FAN 
     //gl.drawArrays(gl.TRIANGLES, 0, data.points.length / 2);
     
-    // RENDERIZA O PERSONAGEM
+    // FRENTE
     gl.uniform3f(colorUniform, color1[0], color1[1], color1[2]);
     gl.drawArrays(gl.TRIANGLES, 0, 6);
     
-    // RENDERIZA O CENARIO
+    // TOPO
     gl.uniform3f(colorUniform, color2[0], color2[1], color2[2]);
-    gl.drawArrays(gl.TRIANGLES, 6, 3);
+    gl.drawArrays(gl.TRIANGLES, 6, 6);
     
+    // BAIXO
+    gl.uniform3f(colorUniform, color3[0], color3[1], color3[2]);
+    gl.drawArrays(gl.TRIANGLES, 12, 6);
+
+    // ESQUERDA
+    gl.uniform3f(colorUniform, color4[0], color4[1], color4[2]);
+    gl.drawArrays(gl.TRIANGLES, 18, 6);
+
+    // DIREITA
+    gl.uniform3f(colorUniform, color5[0], color5[1], color5[2]);
+    gl.drawArrays(gl.TRIANGLES, 24, 6);
+
+    // FUNDO
+    gl.uniform3f(colorUniform, color6[0], color6[1], color6[2]);
+    gl.drawArrays(gl.TRIANGLES, 30, 6);
+
     window.requestAnimationFrame(render);
 }
 
