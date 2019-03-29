@@ -20,6 +20,7 @@ let frame = 0,
     loc = [0, 0, 0],
     modelUniform,
     model,
+    model2,
     viewUniform,
     view,
     eye = [0, 0, 0],
@@ -166,8 +167,8 @@ async function main() {
     // 7.3 - MODEL MATRIX UNIFORM
     model = mat4.create();
     modelUniform = gl.getUniformLocation(shaderProgram, "model");
-    gl.uniformMatrix4fv(modelUniform, false, model);
     
+    model2 = mat4.fromTranslation([], [2.5, 0, 0]);
 
 
     // 7.4 - COLOR UNIFORM
@@ -197,30 +198,16 @@ function render() {
     // gl.TRIANGLES, gl.TRIANGLE_STRIP, gl.TRIANGLE_FAN 
     //gl.drawArrays(gl.TRIANGLES, 0, data.points.length / 2);
     
-    // FRENTE
+    // CUBO 01
+    gl.uniformMatrix4fv(modelUniform, false, model);
     gl.uniform3f(colorUniform, color1[0], color1[1], color1[2]);
-    gl.drawArrays(gl.TRIANGLES, 0, 6);
-    
-    // TOPO
+    gl.drawArrays(gl.TRIANGLES, 0, 36);
+
+    // CUBO 02
+    gl.uniformMatrix4fv(modelUniform, false, model2);
     gl.uniform3f(colorUniform, color2[0], color2[1], color2[2]);
-    gl.drawArrays(gl.TRIANGLES, 6, 6);
+    gl.drawArrays(gl.TRIANGLES, 0, 36);
     
-    // BAIXO
-    gl.uniform3f(colorUniform, color3[0], color3[1], color3[2]);
-    gl.drawArrays(gl.TRIANGLES, 12, 6);
-
-    // ESQUERDA
-    gl.uniform3f(colorUniform, color4[0], color4[1], color4[2]);
-    gl.drawArrays(gl.TRIANGLES, 18, 6);
-
-    // DIREITA
-    gl.uniform3f(colorUniform, color5[0], color5[1], color5[2]);
-    gl.drawArrays(gl.TRIANGLES, 24, 6);
-
-    // FUNDO
-    gl.uniform3f(colorUniform, color6[0], color6[1], color6[2]);
-    gl.drawArrays(gl.TRIANGLES, 30, 6);
-
     window.requestAnimationFrame(render);
 }
 
