@@ -2,6 +2,16 @@
 
 let {mat4, vec4, vec3, vec2} = glMatrix;
 
+const SPEED = 0.1;
+
+const COS_45 = Math.cos(Math.PI * 0.25);
+
+let ku = 0, 
+    kd = 0, 
+    kl = 0, 
+    kr = 0,
+    pos = [0,0,0];
+
 let frame = 0,
     canvas,
     gl,
@@ -168,7 +178,7 @@ async function main() {
     model = mat4.create();
     modelUniform = gl.getUniformLocation(shaderProgram, "model");
     
-    model2 = mat4.fromTranslation([], [2.5, 0, 0]);
+    model2 = mat4.fromTranslation([], pos);
 
 
     // 7.4 - COLOR UNIFORM
@@ -184,6 +194,20 @@ function render() {
     frame ++;
 
     let time = frame / 100;
+
+    let hor = (kl + kr) * SPEED;
+    let ver = (ku + kd) * SPEED;
+
+    if(hor !== 0 && ver !== 0) {
+        hor *= COS_45;
+        ver *= COS_45;
+    }
+
+    pos[0] += hor;
+    pos[1] += ver;
+
+    model2 = mat4.fromTranslation([], pos);
+
 
     eye  = [Math.sin(time) * 5, 3, Math.cos(time) * 5];
     let up = [0, 1, 0];
@@ -217,7 +241,25 @@ function follow(evt) {
     loc = [locX, locY];
 }
 
+function keyUp(evt){
+    if(evt.key === "ArrowDown") return kd = 0;
+    if(evt.key === "ArrowUp") return ku = 0;
+    if(evt.key === "ArrowLeft") return kl = 0;
+    if(evt.key === "ArrowRight") return kr = 0;
+}
+
+function keyDown(evt){
+    if(evt.key === "ArrowDown") return kd = -1;
+    if(evt.key === "ArrowUp") return ku = 1;
+    if(evt.key === "ArrowLeft") return kl = -1;
+    if(evt.key === "ArrowRight") return kr = 1;
+}
+
+
 // keypress, keydown, keyup
 window.addEventListener("load", main);
 
 window.addEventListener("mousemove", follow);
+
+window.addEventListener("keyup", keyUp);
+window.addEventListener("keydown", keyDown);
