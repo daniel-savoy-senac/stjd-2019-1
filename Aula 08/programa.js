@@ -17,21 +17,37 @@ function main(){
     // 2.1 - Adicionar à cena
     scene.add( cube );
 
-    // 3 - Posicionar câmera
-    camera.position.z = 5;
+    // 3 - Criar luzes
+    createLights();
 
-    //4 - Inicia Loop de Redesenho
+    // 4 - Posicionar câmera
+    camera.position.z = 5;
+    camera.position.y = 3;
+    camera.lookAt(0,0,0);
+
+    //5 - Inicia Loop de Redesenho
     animate();
 }
 
 function animate() {
+    cube.rotateY(Math.PI/30);
+    cube.position.x += 0.01;
     renderer.render(scene, camera);
     window.requestAnimationFrame(animate);
 }
 
+function createLights(){
+    var ambient = new THREE.AmbientLight( 0x404040 );
+    scene.add( ambient );
+
+    var point = new THREE.PointLight( 0xffffff, 1, 100 );
+    point.position.set( 50, 50, 50 );
+    scene.add( point );
+}
+
 function getCubeData(){
     let geometry = new THREE.BoxGeometry( 1, 1, 1 );
-    let material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+    let material = new THREE.MeshLambertMaterial( { color: 0x00ff00 } );
     let cube = new THREE.Mesh( geometry, material );
     return cube;
 }
